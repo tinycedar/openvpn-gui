@@ -48,6 +48,7 @@
 #include "misc.h"
 #include "access.h"
 #include "save_pass.h"
+#include "nautilus.h"
 
 #define WM_OVPN_STOP    (WM_APP + 10)
 #define WM_OVPN_SUSPEND (WM_APP + 11)
@@ -330,6 +331,7 @@ UserAuthDialogFunc(HWND hwndDlg, UINT msg, WPARAM wParam, LPARAM lParam)
             break;
 
         case IDOK:
+            printf("Ok button clicked...\n");
             if (GetDlgItemTextW(hwndDlg, ID_EDT_AUTH_USER, username, _countof(username)))
             {
                 SaveUsername(param->c->config_name, username);
@@ -350,6 +352,7 @@ UserAuthDialogFunc(HWND hwndDlg, UINT msg, WPARAM wParam, LPARAM lParam)
             return TRUE;
 
         case IDCANCEL:
+            printf("Cancel button clicked...\n");
             EndDialog(hwndDlg, LOWORD(wParam));
             StopOpenVPN(param->c);
             return TRUE;
@@ -757,6 +760,7 @@ OnPassword(connection_t *c, char *msg)
         }
         else
         {
+            printf("popup auth dialog\n");
             LocalizedDialogBoxParam(ID_DLG_AUTH, UserAuthDialogFunc, (LPARAM) param);
         }
     }
@@ -1491,6 +1495,8 @@ SetProcessPriority(DWORD *priority)
 BOOL
 StartOpenVPN(connection_t *c)
 {
+    printf("Connect from tray...\n");
+    // SayBye();
     TCHAR cmdline[1024];
     TCHAR *options = cmdline + 8;
     TCHAR exit_event_name[17];
